@@ -1,47 +1,97 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { useAccountsStore } from '@/stores/accounts'
+import AccountsList from './components/AccountsList.vue'
+
+const store = useAccountsStore()
+
+const addAccount = () => {
+  store.addAccount()
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <v-app style="min-height: 100vh; width: 100vw">
+    <v-main>
+      <v-container fluid class="pa-4" style="max-width: 100%; width: 100%">
+        <v-card class="mb-6" elevation="3">
+          <v-card-title class="d-flex align-center justify-space-between">
+            <div>
+              <h1 class="text-h4 font-weight-bold">Управление учетными записями</h1>
+              <p class="text-subtitle-1 text-grey mt-2 mb-0">
+                Добавляйте, редактируйте и удаляйте учетные записи пользователей
+              </p>
+            </div>
+            <v-btn
+              color="primary"
+              size="large"
+              prepend-icon="mdi-plus"
+              @click="addAccount"
+              class="ml-4"
+            >
+              Добавить учетную запись
+            </v-btn>
+          </v-card-title>
+        </v-card>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+        <v-alert type="info" variant="tonal" class="mb-6" closable>
+          <template v-slot:title>
+            <strong>Подсказка для поля "Метка"</strong>
+          </template>
+          <div class="text-body-2">
+            • Поле необязательное для заполнения<br />
+            • Максимум 50 символов<br />
+            • Разделяйте несколько меток знаком <strong>;</strong> (точка с запятой)<br />
+            • Пример: <code>админ; супер-пользователь; тест</code>
+          </div>
+        </v-alert>
 
-  <main>
-    <TheWelcome />
-  </main>
+        <AccountsList />
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+.v-container {
+  max-width: 100%;
+  margin: 0;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.v-card-title h1 {
+  background: linear-gradient(45deg, #1976d2, #42a5f5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+.v-btn {
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+  transition: all 0.3s ease;
+}
+
+.v-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+}
+
+code {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+  .v-card-title {
+    flex-direction: column;
+    align-items: flex-start !important;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+  .v-card-title .v-btn {
+    margin-left: 0 !important;
+    margin-top: 1rem;
+    width: 100%;
   }
 }
 </style>
